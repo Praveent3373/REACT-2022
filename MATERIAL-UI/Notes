@@ -1,0 +1,106 @@
+Material UI
+
+<!-- installation -->
+
+npm install @material-ui/core
+npm install @material-ui/icons
+
+<!-- Roboto Font (add fonts in index.html file) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+
+
+
+<!-- sample -->
+import Button from '@material-ui/core/Button';
+function App() {
+  return (
+    <Button variant="contained" color="primary">
+      Hello World
+    </Button>
+  );
+}
+
+
+<!-- important components -->
+
+<!-- make internal styles -->
+import { makeStyles } from '@material-ui/core/styles';
+const useStyles = makeStyles({
+  root: {
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    color: 'white',
+    height: 48,
+    padding: '0 30px',
+  },
+});
+export default function Hook() {
+  const classes = useStyles();
+  return <Button className={classes.root}>Hook</Button>;
+}
+
+<!-- icons -->
+import GitHubIcon from '@material-ui/icons/GitHub';
+<AppBar>
+    <Toolbar>
+        <GitHubIcon></GitHubIcon>
+        <Typography variant='h5'>Github users</Typography>
+    </Toolbar>
+</AppBar>
+
+<!-- buttons -->
+<Button variant="contained">Default</Button>
+<Button variant="contained" color="primary">Primary</Button>
+<Button variant="contained" color="secondary">Secondary</Button>
+<Button variant="contained" disabled>Disabled</Button>
+<Button variant="contained" color="primary" href="#contained-buttons">Link</Button>
+
+<Button 
+    onClick={() => alert('material ui')}
+    startIcon = {<SaveIcon/>} // endIcon
+    variant='contained' // outlined
+    color='primary' // 'seconday'
+    size='large' // 'small'
+    style={{fontSize: 16}}
+    // disabled>   
+    click here
+</Button>
+      
+
+<!-- customize theme -->
+
+// https://v4.mui.com/customization/default-theme/#default-theme
+// https://v4.mui.com/customization/theming/
+
+import { createTheme } from "@material-ui/core";
+import { green, purple } from "@material-ui/core/colors";
+export const theme = createTheme({
+    palette: {
+        primary: {
+            main: purple[500]
+        },
+        secondary: {
+            main: green[500]
+        }
+    }
+})
+
+import { theme } from './theme';
+import { ThemeProvider } from '@material-ui/core';
+const newTheme = theme;
+function App() {
+  return (
+    <ThemeProvider theme={newTheme}>
+        <ComponentA />
+    </ThemeProvider>
+  );
+}
+
+
+
+
+// urls
+
+// https://v4.mui.com/customization/breakpoints/#breakpoints

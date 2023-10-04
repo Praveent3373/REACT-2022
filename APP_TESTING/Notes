@@ -1,0 +1,215 @@
+
+// JEST TESTING FRAMEWORK
+
+// What is test 
+// Code you write to verify the behavior of your application.
+
+// Why write testing
+// Documentation: tests are specifications for how our code should work
+// Consistany: verify that engineers are following best practices and conventions for your team
+// Comfort and Confidence
+// Productivity: we write tests because it allows us to ship quality code faster.
+
+// Types of tests
+// End-to-End: spin up your app and simulate user behavior. kind of like a robot performing a task in your app.
+// Integration: Verify that multiple units work together.
+// Unit: verify the functionality of a single function / component.
+// Static: Catch typos and errors while writing code.
+
+// React Component Tests
+
+// A basic test
+
+// const expected = true;
+// const actual = false;
+if(actual !== expected){
+    throw new Error(`${actual} is not ${expected}`)
+}
+
+// A jest test
+
+const expected = true;
+const actual = false;
+
+test("it works", () => {
+    expect(actual).toBe(expected);
+})
+
+
+// Steps to install
+// ----------------------------
+// npm init -y
+// npm i -D jest
+// -> in package.json change test (scripts > "test": "jest")
+// -> create functions.js or any name and create another file functions.test.js
+// npm test
+
+
+// refere traversy:
+// https://github.com/bradtraversy/jest_testing_basics
+
+// example:
+
+ex: functions.js
+
+const functions = {
+    add: (n1, n2) => n1 + n2,
+    substract: (n1, n2) => n1 - n2,
+    multiplication: (n1, n2) => n1 * n2
+}
+module.exports = functions;
+
+functions.test.js
+
+const functions = require('./functions');
+test('2 plus 2 is 4', () => {
+    expect(functions.add(2, 2)).toBe(4);
+})
+test('2 minus 2 is 0', () => {
+    expect(functions.substract(2, 2)).toBe(0);
+})
+test('2 times 4 is 8', () => {
+    expect(functions.multiplication(2, 4)).toBe(8);
+})
+
+
+
+
+// Enzyme allows you to access the internal workings of your components. you can mock children to make tests run faster.
+// Where as React testing library cannot able to test child components.
+
+// https://testing-library.com/docs/react-testing-library/migrate-from-enzyme
+// https://enzymejs.github.io/enzyme/
+
+
+// jest comes with react by default when we create app with npx
+
+// npm i -D --exact jest-watch-typeahead@0.6.5
+
+// without enzyme
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <a href="https://reactjs.org" target="_blank"> Learn React </a>
+        <h6>lets get started</h6>
+      </header>
+    </div>
+  );
+}
+
+test('renders learn react link', () => {
+  render(<App />);
+  const linkElement = screen.getByText(/learn react/i);
+  expect(linkElement).toBeInTheDocument();
+});
+
+
+
+// Jest
+// Jest is a JavaScript testing framework written by Facebook. It will help us make all our assertions.
+// Note: We need to install Jest before writing any test cases. When we run the create-react-app command, it will automatically install Jest in our React application.
+
+// Enzyme
+// Enzyme is a JavaScript testing utility for easily testing React components. It helps render React components in testing mode.
+
+// npm i --save-dev enzyme enzyme-adapter-react-16
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// React-testing-library with jest
+
+// it or test: describes the test itself. It takes as parameters the name of the test and a function that holds the tests.
+// expect: the condition that the test needs to pass. It will compare the received parameter to a matcher.
+// a matcher: a function that is applied to the expected condition.
+// render: the method used to render a given component.
+data-testid:  used to select these elements from the test file.
+getByTestId to select the necessary elements
+
+
+// The React Testing Library is a very light-weight package created by Kent C. Dodds. It's a replacement for Enzyme and provides light utility functions on top of react-dom and react-dom/test-utils.
+
+// Snapshot
+// A snapshot, as the name suggests, allows us to save the snapshot of a given component. It helps a lot when you update or do some refactoring, and want to get or compare the changes.
+
+import React from 'react'
+import {render, cleanup} from '@testing-library/react'
+import App from './App'
+
+afterEach(cleanup)
+it('should take a snapshot', () => {
+  const { asFragment } = render(<App />)
+  expect(asFragment(<App />)).toMatchSnapshot()
+})
+
+
+sample example:
+
+import { useState } from "react";
+const TestDomElements = () => {
+    const [count, setCount] = useState(0);
+    return (
+        <div>
+            <h1 data-testid="counter">{count}</h1>
+            <button data-testid="button-up" onClick={() => setCount(count + 1)}>increment</button>
+            <button disabled data-testid="button-down" onClick={() => setCount(count - 1)}>decrement</button>
+        </div>
+    )
+}
+export default TestDomElements;
+
+import React from 'react';
+import { render, cleanup } from '@testing-library/react';
+import TestDomElements from './TestDomElements';
+
+describe('testing TestDomElements component', ()=> {
+    test('counter value should be 0', ()=> {
+        const {getByTestId} = render(<TestDomElements/>)
+        expect(getByTestId('counter')).toHaveTextContent("0")
+    });
+    test("button should be enabled", () => {
+        const {getByTestId} = render(<TestDomElements/>);
+        expect(getByTestId('button-up')).not.toHaveAttribute('disabled');
+    })
+    test("button should be disabled", () => {
+        const {getByTestId} = render(<TestDomElements/>);
+        expect(getByTestId('button-down')).toBeDisabled();
+    })
+})
+
+
+
+
+fireEvent.click() to check if the counter increments to 1 when the button is clicked.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

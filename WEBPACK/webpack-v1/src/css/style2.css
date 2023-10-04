@@ -1,0 +1,11 @@
+#divred{  
+    border-bottom: 30px solid red;  
+    background-color: lightgrey;  
+    min-height: 150px;  
+}  
+
+#divblue{  
+    border-bottom: 30px solid blue;  
+    background-color: lightgrey;  
+    min-height: 150px;  
+}   

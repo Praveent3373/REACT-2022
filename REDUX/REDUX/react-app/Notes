@@ -1,0 +1,61 @@
+// npm i redux react-redux
+// npm install redux-logger
+// npm install axios redux-thunk
+
+
+import { useDispatch, useSelector } from "react-redux";
+import { createStore } from "redux";
+import "./styles.css";
+
+const initialState = {
+  count: 0
+};
+
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "Increment":
+      return { count: state.count + 1 };
+    case "Decrement":
+      return { count: state.count - 1 };
+    case "Reset":
+      return { count: 0 };
+    default:
+      return state;
+  }
+};
+
+const increment = () => {
+  return {
+    type: "Increment"
+  };
+};
+const decrement = () => {
+  return {
+    type: "Decrement"
+  };
+};
+const reset = () => {
+  return {
+    type: "Reset"
+  };
+};
+
+export const store = createStore(reducer);
+
+export default function App() {
+  const value = useSelector((state) => state.count);
+  const dispatch = useDispatch();
+  return (
+    <div className="App">
+      <h5>The value is {value}</h5>
+      <button onClick={() => dispatch(increment())}>Increment</button>
+      <button onClick={() => dispatch(decrement())}>Decrement</button>
+      <button onClick={() => dispatch(reset())}>Reset</button>
+    </div>
+  );
+}
+
+
+
+
+// we need to remove the fetching data in the component and put it into the action creaters.

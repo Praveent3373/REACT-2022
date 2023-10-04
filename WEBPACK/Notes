@@ -1,0 +1,295 @@
+WEBPACK:
+--------------------------
+Webpack is an open-source JavaScript module bundler. It is made primarily for JavaScript, but it can transform front-end assets such as HTML, CSS,
+and images if the corresponding loaders are included. webpack takes modules with dependencies and generates static assets representing those modules.
+
+=> module bundler
+=> custom file or NPM installed
+=> generates static assets
+=> extend with plugins & loaders
+
+properties of a module: 
+--------------------------
+=> discrete chunck of functionality
+=> abstraction
+=> encapsulation
+=> usually a single task or responsibility
+=> reusable
+
+How is a webpack diffrent?
+--------------------------
+=> code splitting 
+=> loaders (CSS, SASS, JSX, etc)
+=> clever parsing (require("./templates/" + name + ".jade"))
+=> plugins
+
+Example Loaders
+--------------------------
+=> CSS & style
+=> Sass & Less
+=> JSX(react)
+=> Babel
+=> Coffee
+=> Typescript
+=> EJS, Pug, Handlebars
+=> json
+
+How Webpack works
+--------------------------
+step1: webpack reads the entry point and analyzes its dependencies, its dependencies'dependencies, and so on.
+step2: webpack budles the entry point and all its dependencies into a single file.
+
+webpack installation
+--------------------------
+npm init -y
+npm i -D webpack webpack-cli webpack-dev-server 
+npm i -D css-loader style-loader
+npm i -D babel-loader @babel/core @babel/preset-env
+
+https://webpack.js.org/plugins/html-webpack-plugin/
+npm i --D html-webpack-plugin
+
+outputing seperate css file from sass
+-----------------------------
+npm install --save-dev mini-css-extract-plugin
+
+webpack.config.js
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+module.exports = {
+  plugins: [new MiniCssExtractPlugin()],
+  module: {
+    rules: [
+      {
+        test: /\.s[ac]ss$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
+    ],
+  },
+};
+
+sourcemaps for debugging
+----------------------------
+webpack.config.js
+mode:"development",
+devtool: "source-map"
+-> it will shows sass file in inspect for exact debugging
+-> use only for debugging later remove
+
+htmlwebpack plugin
+---------------------------
+-it will generate index.html file and also inject bundle.js into index.html
+-The plugin will generate an HTML5 file for you that includes all your webpack bundles in the body using script tags.
+-If you have multiple webpack entry points, they will all be included with <script> tags in the generated HTML.
+-If you have any CSS assets in webpack's output (for example, CSS extracted with the MiniCssExtractPlugin) then these will be
+ included with <link> tags in the <head> element of generated HTML.
+
+npm install --save-dev html-webpack-plugin
+
+webpack.config.js
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+
+module.exports = {
+  entry: 'index.js',
+  output: {
+    path: path.resolve(__dirname, './dist'),
+    filename: 'index_bundle.js',
+  },
+  plugins: [new HtmlWebpackPlugin()],
+};
+
+This will generate a file dist/index.html containing the following:
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>webpack App</title>
+  </head>
+  <body>
+    <script src="index_bundle.js"></script>
+  </body>
+</html>
+
+========= with react from scracth
+
+npm init -y
+npm i react react-dom
+npm i -D webpack webpack-dev-server webpack-cli
+npm i -D babel-core babel-loader babel-preset-env babel-preset-react html-webpack-plugin
+
+webpack.config.js
+--------------------
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+module.exports = {
+    entry: "./src/index.js",
+    output: {
+        path: path.resolve(__dirname, "dist"),
+        filename: "bundle.js"
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: "./src/index.html"
+        })
+    ],
+    module: {
+        rules: [
+        {
+            test: /\.m?js$/,
+            exclude: /node_modules/,
+            use: {
+                loader: 'babel-loader',
+                options: {
+                presets: [
+                    ['@babel/preset-env', { targets: "defaults" }]
+                ]
+                }
+            }
+        },
+        { test: /\.(png|jpe?g|gif)$/i, loader: 'file-loader' },
+        ]
+    },
+}
+
+create .babelrc and add presets
+.babelrc
+--------------------
+{
+    "presets": [
+        "@babel/preset-env",
+       ["@babel/preset-react", {"runtime": "automatic"}]
+    ]
+}
+
+package.json
+--------------------
+"start" : "webpack-dev-server --mode development --open --hot",
+"build" : "webpack --mode production"
+
+
+index.html
+-------------------
+import react from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+
+ReactDOM.render(<App name = {'praveen kumar'}></App>, document.getElementById('root'))
+
+App.js
+-------------------
+import img1 from './images/1.jpg';
+const App = ({name}) => {
+    return <div>
+        <h1>Hey mr {name} how are you </h1>
+        <img src={img1} width="25%" alt="" />
+    </div>
+}
+export default App;
+
+index.html
+-------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Application</title>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>
+
+========= example webpack with js
+
+index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpack</title>
+   </head>
+<body>
+    <h1>webpack version 01</h1>
+        <div id="div1">              
+            <button class="button" id="btnToggle">Toggle Div</button>  
+            <br/>  
+            <div id="divred">  
+                This property is a shorthand property for border-bottom-width, border-bottom-style, and border-bottom-color.  
+            </div>  
+            <div id="divblue">  
+                This property is a shorthand property for border-bottom-width, border-bottom-style, and border-bottom-color.  
+            </div>  
+        </div>  
+    <script src="dist/bundle.js"></script>
+</body>
+</html>
+
+style1.css
+
+.button {  
+    background-color: #4CAF50; border: none; color: white; padding: 15px 32px; text-align: center;
+    text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer;
+}  
+ 
+#div1 {  
+    margin-left: 450px; margin-top: 30px;  margin-right: 150px  
+} 
+
+style2.css
+
+#divred{  
+    border-bottom: 30px solid red;  
+    background-color: lightgrey;  
+    min-height: 150px;  
+}  
+
+#divblue{  
+    border-bottom: 30px solid blue;  
+    background-color: lightgrey;  
+    min-height: 150px;  
+}   
+
+
+script1.js
+
+export var divredId=document.getElementById("divred");  
+export var divblueId=document.getElementById("divblue");  
+export var btnToggle=document.getElementById("btnToggle");
+
+script2.js
+
+import { divredId, divblueId, btnToggle } from "./script1";
+import '../css/style1.css';
+import '../css/style2.css';
+
+let div='divred';  
+divredId.style.display='none';  
+btnToggle.addEventListener('click',toggleDiv);  
+function toggleDiv(){  
+    console.log(div);
+    if(div=='divblue')  
+    {  
+        div='divred';  
+        divblueId.style.display='block';  
+        divredId.style.display='none';  
+    }  
+    else if(div=='divred')  
+    {  
+        div='divblue';  
+        divblueId.style.display='none';  
+        divredId.style.display='block';  
+    }  
+}   
+
+
+
+
+
