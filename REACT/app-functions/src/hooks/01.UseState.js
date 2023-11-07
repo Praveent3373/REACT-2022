@@ -39,25 +39,22 @@ console.log(profileName, age, getName());
 
 /* in function */
 function useState(){
-    let user2 = {
-        username1: 'Praveen',
-        age1: 29,
-        getName1(){
-            return 5
-        }
-    }
+    let user2 = [
+      "praveen",
+      20,
+      function getName(){
+         return 5
+    }]
     return user2
 }
 let [username1, age1, getName1] = useState();
-console.log(username1, age1, getName());
+console.log(username1, age1, getName1());
 
-/*
-let user2 = {
-    username1: 'Praveen',
-    age1: 29,
-    getName1(){
-        return 5
-    }
-}
-let [username1, age1, getName1] = user2;
-*/
+// let user2 = [
+//     "praveen",
+//     20,
+//     function getName(){
+//         return 5
+//     }
+// ]
+// let [name, age, getName] = user2;
